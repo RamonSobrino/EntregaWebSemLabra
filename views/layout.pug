@@ -1,0 +1,30 @@
+doctype html
+html
+    head
+        title Entrega Web Semántica
+        link(rel='stylesheet', href='/css/style.css')
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        block extraHeads
+    body
+        main
+            block header
+                header.header
+                    h1 Entrega WESO
+            block nav
+                ul(class="navul")
+                    li(class="navli")
+                        a(href='/query1') Query1
+                    li(class="navli")
+                        a(href='/query2') Query2
+                    li(class="navli")
+                        a(href='/query3') Query3
+                    li(class="navli")
+                        a(href='/query4') Query4 (Lenta)
+                    li(class="navli")
+                        a(href='/query5') Query5
+
+            block content
+
+            block footer
+                footer.footer
+                p Ramón Sobrino UO250817 - Ana Isabel Blanco UO227799

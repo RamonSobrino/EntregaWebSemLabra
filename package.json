@@ -1,0 +1,10 @@
+{
+  "name": "EntregaWebSem",
+  "author": "Ramon Sobrino y Ana Isabel Blancp",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pug": "^2.0.4",
+    "request": "^2.88.2"
+  }
+}
