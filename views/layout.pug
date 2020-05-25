@@ -3,7 +3,17 @@ html
     head
         title Entrega Web Semántica
         link(rel='stylesheet', href='/css/style.css')
+        link(rel='stylesheet', href='https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css')
         meta(name="viewport" content="width=device-width, initial-scale=1")
+        script(src="https://code.jquery.com/jquery-3.5.1.js")
+        script(src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js")
+        script(src="https://www.gstatic.com/charts/loader.js")
+        script.
+            $(document).ready(function () {
+                $('.table').DataTable({
+                    "pagingType": "full_numbers"
+                });
+            });
         block extraHeads
     body
         main

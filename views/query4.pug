@@ -1,18 +1,69 @@
 extends layout
+block extraHeads
+    script.
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', {'packages': ['corechart']});
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            // Create the data table.
+            var dataTable = new google.visualization.DataTable();
+            //Transform result
+            var result = JSON.parse(`!{JSON.stringify(result)}`);
+            console.log(result);
+            dataTable.addColumn('string', 'Pais');
+            dataTable.addColumn('number', 'Astronomos');
+            for (var object in  result ) {
+                dataTable.addRow([result[object].paisLabel.value, parseInt(result[object].numeroAstronomos.value)])
+            }
+
+            // Set chart options
+            var options = {
+                'title': 'Astrónomos del siglo XX y XI  por país',
+                'width': 700,
+                'height': 700
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+            chart.draw(dataTable, options);
+        }
+
 block content
     div.container
-        h1.cabeceraQueries Astrónomos del siglo XX y XI por pais de nacimiento
-        table.table
-            tr
-                th País
-                th Número de astrónomos
-
-            each data in result
-                tr
-                    td(itemscope, itemtype='https://schema.org/Country')
-                        if data.paisLabel && data.pais
-                            span(itemprop="name")
-                            a(href=`${data.pais.value}` ) #{data.paisLabel.value}
-                    td
-                        if data.numeroAstronomos
-                                p #{data.numeroAstronomos.value}
+        div.tab
+            button.tablinks.active(onclick="openTab(event, 'table_div')") Tabla
+            button.tablinks(onclick="openTab(event, 'chart_div')") Gráfico
+        div.tabcontent#table_div(style="display:block;")
+            h1.cabeceraQueries Astrónomos del siglo XX y XI por pais de nacimiento
+            table.table
+                thead
+                    tr
+                        th País
+                        th Número de astrónomos
+                tbody
+                    each data in result
+                        tr
+                            td(itemscope, itemtype='https://schema.org/Country')
+                                if data.paisLabel && data.pais
+                                    span(itemprop="name")
+                                    a(href=`${data.pais.value}` ) #{data.paisLabel.value}
+                            td
+                                if data.numeroAstronomos
+                                        p #{data.numeroAstronomos.value}
+        div.tabcontent#chart_div
+        script.
+            function openTab(evt, tabName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(tabName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
