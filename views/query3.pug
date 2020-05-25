@@ -11,9 +11,9 @@ block content
             each data in result
                 tr
                     td(itemscope, itemtype='https://schema.org/Country')
-                        if data.paisLabel
+                        if data.paisLabel && data.pais
                             span(itemprop="name")
-                            p #{data.paisLabel.value}
+                            a(href=`${data.pais.value}` ) #{data.paisLabel.value}
                     td
                         if data.numeroAsteroides
                             p #{data.numeroAsteroides.value}
