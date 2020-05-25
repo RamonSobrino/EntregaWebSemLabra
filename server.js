@@ -95,7 +95,16 @@ function handleQuery2(res) {
 }
 function handleQuery3(res) {
     var base = 'https://query.wikidata.org/sparql?format=json&query=';
-    var queryTemp='SELECT ?equipo ?equipoLabel ?foto WHERE { ?equipo wdt:P118 wd:Q28454335 . OPTIONAL{?equipo wdt:P154 ?foto .} SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . } } LIMIT 100'
+    var queryTemp='SELECT ?pais ?paisLabel (COUNT(DISTINCT ?asteroid) AS ?numeroAsteroides) WHERE {\n' +
+        '\n' +
+        '  ?asteroid wdt:P31 wd:Q3863 .\n' +
+        '  ?asteroid wdt:P61 ?descubridor .\n' +
+        '  ?descubridor wdt:P19 ?lugar .\n' +
+        '  ?lugar wdt:P17 ?pais .            \n' +
+        '            \n' +
+        '  SERVICE wikibase:label { bd:serviceParam wikibase:language "es". }\n' +
+        '         \n' +
+        '} GROUP BY ?pais ?paisLabel'
     var query=base+queryTemp;
     queryWikidata(res,query,function (body){
         var bodyJson = JSON.parse(body);
@@ -105,22 +114,17 @@ function handleQuery3(res) {
 
 function handleQuery4(res) {
     var base = 'https://query.wikidata.org/sparql?format=json&query=';
-    var queryTemp='SELECT ?propietario ?propietarioLabel ?countt WHERE { { SELECT ?propietario (COUNT(DISTINCT ?equipo) AS ?countt) WHERE { ?equipo wdt:P112 ?propietario  .     SERVICE wikibase:label { bd:serviceParam wikibase:language "en" .  } }  GROUP BY ?propietario } FILTER ( ?countt > 1 ) ?equipo wdt:P112 ?propietario  . ?equipo wdt:P118 wd:Q28454335 .SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . } } ORDER BY DESC(?count)'
+    var queryTemp = 'SELECT ?pais  ?paisLabel (COUNT(DISTINCT ?astronomer) AS ?numeroAstronomos)  WHERE {\n' +
+        '  ?astronomer wdt:P106 wd:Q11063;\n' +
+        '           wdt:P19 ?lugar ;\n' +
+        '           wdt:P569 ?fechaNacimiento.\n' +
+        '  ?lugar wdt:P17 ?pais .   \n' +
+        '  FILTER("1900-01-01"^^xsd:dateTime <= ?fechaNacimiento ).\n' +
+        '  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }         \n' +
+        '}  GROUP BY ?pais ?paisLabel';
     var query=base+queryTemp;
     queryWikidata(res,query,function (body){
         var bodyJson = JSON.parse(body);
         sendResponse(res,'query4',bodyJson.results.bindings)
     })
 }
-
-function handleQuery5(res) {
-    var base = 'https://query.wikidata.org/sparql?format=json&query=';
-    var queryTemp='SELECT ?jugador ?jugadorLabel ?fullName ?hermano ?hermanoLabel ?fullName2 WHERE { ?jugador wdt:P2416 wd:Q18515944 . ?jugador wdt:P3373 ?hermano . OPTIONAL{?jugador wdt:P1559 ?fullName .} OPTIONAL{?hermano wdt:P1559 ?fullName2 .} SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . } }'
-    var query=base+queryTemp;
-    queryWikidata(res,query,function (body){
-        var bodyJson = JSON.parse(body);
-        sendResponse(res,'query5',bodyJson.results.bindings)
-    })
-}
-//
-//

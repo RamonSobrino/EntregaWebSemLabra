@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    div.container
+        h1.cabeceraQueries Número de asteroides descubiertos agrupados por el pais de donde nacio el descubridor
+        table.table#customTable
+            tr
+                th País
+                th Número de asteroides
+
+            each data in result
+                tr
+                    td(itemscope, itemtype='https://schema.org/Country')
+                        if data.paisLabel
+                            span(itemprop="name")
+                            p #{data.paisLabel.value}
+                    td
+                        if data.numeroAsteroides
+                            p #{data.numeroAsteroides.value}

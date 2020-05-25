@@ -1,0 +1,18 @@
+extends layout
+block content
+    div.container
+        h1.cabeceraQueries Astrónomos del siglo XX y XI por pais de nacimiento
+        table.table
+            tr
+                th País
+                th Número de astrónomos
+
+            each data in result
+                tr
+                    td(itemscope, itemtype='https://schema.org/Country')
+                        if data.paisLabel
+                            span(itemprop="name")
+                            p #{data.paisLabel.value}
+                    td
+                        if data.numeroAstronomos
+                                p #{data.numeroAstronomos.value}
