@@ -1,0 +1,34 @@
+extends layout
+
+block content
+    div.container
+        h1.cabeceraQueries Constelaciones
+
+    table.table
+        tr
+            th Reference
+            th Nombre
+            th Nombre Corto
+            th Imagen
+            th Area
+
+        each cons in result
+            tr()
+                td
+                    if cons.constelacion
+                        span(itemprop="identifier")
+                            a(href=`${cons.constelacion.value}` ) Ref
+                td
+                    if cons.constelacionLabel
+                        p #{cons.constelacionLabel.value}
+                td
+                    if cons.nombreCorto
+                        span(itemprop="alternateName")
+                            p #{cons.nombreCorto.value}
+                td
+                    if cons.imagenConstelacion
+                        span(itemprop="alternateName")
+                            img(src=`${cons.imagenConstelacion.value}`  )
+                td
+                    if cons.areaConstelacion
+                        p #{cons.areaConstelacion.value}
