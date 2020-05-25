@@ -3,3 +3,35 @@ extends layout
 block content
     div.container
         h1.cabeceraQueries Planetas y distancias
+
+    table.table
+        tr
+            th Reference
+            th Nombre
+            th Distancia Maxima a la Tierra
+            th Distancia Maxima al Sol
+            th Distancia Minima al Sol
+
+        each planet in result
+            tr()
+                td
+                    if planet.planet
+                        span(itemprop="identifier")
+                            a(href=`${planet.planet.value}` ) Ref
+                td
+                    if planet.planetLabel
+                        span(itemprop="alternateName")
+                            p #{planet.planetLabel.value}
+                td
+                    if planet.imagenPlaneta
+                        span(itemprop="alternateName")
+                            img(src=`${planet.imagenPlaneta.value}`  )
+                td
+                    if planet.distanciaMaximaTierra
+                            p #{planet.distanciaMaximaTierra.value}
+                td
+                    if planet.distanciaMaxSol
+                            p #{planet.distanciaMaxSol.value}
+                td
+                    if planet.distanciaMinSol
+                            p #{planet.distanciaMinSol.value}

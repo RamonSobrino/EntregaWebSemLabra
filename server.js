@@ -26,9 +26,6 @@ app.get('/query3', (req, res) => {
 app.get('/query4', (req, res) => {
     handleQuery4(res);
 });
-app.get('/query5', (req, res) => {
-    handleQuery5(res);
-});
 
 app.get('/', (req, res) => {
     res.render('index')
@@ -86,11 +83,18 @@ function handleQuery1(res){
 }
 function handleQuery2(res) {
     var base = 'https://query.wikidata.org/sparql?format=json&query=';
-    var queryTemp='SELECT ?paisLabel (COUNT(?pais) AS ?total) WHERE { ?jugador wdt:P2416 wd:Q18515944 . ?jugador wdt:P27 ?pais . SERVICE wikibase:label { bd:serviceParam wikibase:language "en" } } GROUP BY ?paisLabel ORDER BY DESC(?total)'
+    var queryTemp='SELECT  ?constelacion  ?constelacionLabel ?nombreCorto ?imagenConstelacion ?areaConstelacion  WHERE {' +
+        '  ?constelacion  wdt:P31 wd:Q8928 .' +
+        '  ?constelacion wdt:P18 ?imagenConstelacion .' +
+        '  ?constelacion wdt:P361 wd:Q1998069 .' +
+        '  ?constelacion wdt:P1813 ?nombreCorto .' +
+        '  ?constelacion wdt:P2046 ?areaConstelacion .' +
+        '  SERVICE wikibase:label { bd:serviceParam wikibase:language "es". }' +
+        '}ORDER BY DESC(?areaConstelacion)'
     var query=base+queryTemp;
     queryWikidata(res,query,function (body){
         var bodyJson = JSON.parse(body);
-        sendResponse(res,'query2',JSON.stringify(bodyJson.results.bindings))
+        sendResponse(res,'query2',bodyJson.results.bindings)
     })
 }
 function handleQuery3(res) {
@@ -113,14 +117,6 @@ function handleQuery4(res) {
     })
 }
 
-function handleQuery5(res) {
-    var base = 'https://query.wikidata.org/sparql?format=json&query=';
-    var queryTemp='SELECT ?jugador ?jugadorLabel ?fullName ?hermano ?hermanoLabel ?fullName2 WHERE { ?jugador wdt:P2416 wd:Q18515944 . ?jugador wdt:P3373 ?hermano . OPTIONAL{?jugador wdt:P1559 ?fullName .} OPTIONAL{?hermano wdt:P1559 ?fullName2 .} SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . } }'
-    var query=base+queryTemp;
-    queryWikidata(res,query,function (body){
-        var bodyJson = JSON.parse(body);
-        sendResponse(res,'query5',bodyJson.results.bindings)
-    })
-}
+
 //
 //
